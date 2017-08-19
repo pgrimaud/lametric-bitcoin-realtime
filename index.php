@@ -8,7 +8,7 @@ $data = json_decode($decode);
 $display = [
     'frames' => [
         [
-            'text' => $data->bitstampbtcusd->last . '$',
+            'text' => (int)$data->bitstampbtcusd->last . '$',
             'icon' => 'i857',
         ]
     ]
