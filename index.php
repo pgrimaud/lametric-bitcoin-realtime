@@ -1,17 +1,22 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
 
-$json   = file_get_contents('https://s2.bitcoinwisdom.com/ticker');
-$decode = gzinflate(substr($json, 10, -8));
+use Bitcoin\Price;
+use Bitcoin\Response;
 
-$data = json_decode($decode);
+header("Content-Type: application/json");
 
-$display = [
-    'frames' => [
-        [
-            'text' => (int)$data->bitstampbtcusd->last . '$',
-            'icon' => 'i857',
-        ]
-    ]
-];
+$response = new Response();
 
-echo json_encode($display);
+try {
+
+    $marketplace = new \Bitcoin\Exchange($_GET);
+    $price       = new Price(new \GuzzleHttp\Client(), new \Predis\Client(), $marketplace);
+
+    echo $response->data($price->getValue());
+
+} Catch (Exception $exception) {
+
+    echo $response->error();
+
+}
