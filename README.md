@@ -1,7 +1,7 @@
 # "Realtime Bitcoin" for LaMetric
 
 Not another Bitcoin app.
-This application updates every 5 seconds the Bitcoin price from Bitstamp, the European bitcoin exchange.
+This application updates every 5 seconds the Bitcoin price from Bitstamp or Bitfinex, bitcoin exchanges.
 
 ![LaMetric](https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/app.jpg)
 
