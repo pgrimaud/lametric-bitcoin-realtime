@@ -7,8 +7,10 @@ This application updates every 5 seconds the Bitcoin price from Bitstamp, the Eu
 
 ## Bitcoin exchanges available
 
-![LaMetric](https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/bitfinex.jpg)
-![LaMetric](https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/bitstamp.jpg)
+![Bitfinex](https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/bitfinex.jpg)
+
+
+![Bitstamp](https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/bitstamp.jpg)
 
 
 ## Feedback
