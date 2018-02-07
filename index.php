@@ -10,8 +10,8 @@ $response = new Response();
 
 try {
 
-    $marketplace = new \Bitcoin\Exchange($_GET);
-    $price       = new Price(new \GuzzleHttp\Client(), new \Predis\Client(), $marketplace);
+    $exchange = new \Bitcoin\Exchange($_GET);
+    $price    = new Price(new \GuzzleHttp\Client(), new \Predis\Client(), $exchange);
 
     echo $response->data($price->getValue());
 
