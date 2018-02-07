@@ -20,7 +20,7 @@ class Exchange
      */
     public function __construct($parameters = [])
     {
-        $exchange = strtolower(isset($parameters['marketplace']) ? $parameters['marketplace'] : '');
+        $exchange = strtolower(isset($parameters['exchange']) ? $parameters['exchange'] : '');
         $this->name  = in_array($exchange, self::ALLOWED_EXCHANGES) ? $exchange : self::ALLOWED_EXCHANGES[0];
     }
 
