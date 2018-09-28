@@ -1,10 +1,12 @@
 <?php
+
 namespace Bitcoin;
 
 class Response
 {
     /**
      * @param array $data
+     *
      * @return mixed
      */
     public function asJson($data = [])
@@ -30,6 +32,7 @@ class Response
 
     /**
      * @param $price
+     *
      * @return mixed
      */
     public function data($price = 0)
