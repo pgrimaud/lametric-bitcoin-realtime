@@ -63,12 +63,12 @@ class Price
             $data = json_decode($file);
 
             if ($this->exchange->getName() === Exchange::EXCHANGE_BITSTAMP) {
-                $price = $data->last;
+                $price = (int)$data->last;
             } else {
-                $price = $data->last_price;
+                $price = (int)$data->last_price;
             }
 
-            $this->predisClient->set($redisKey, (int)$price);
+            $this->predisClient->set($redisKey, $price);
             $this->predisClient->expireat($redisKey, strtotime("+30 seconds"));
         }
 
