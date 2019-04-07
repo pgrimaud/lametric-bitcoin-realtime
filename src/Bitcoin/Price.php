@@ -7,7 +7,8 @@ use Predis\Client as PredisClient;
 
 class Price
 {
-    const TICKER_ENDPOINT = 'https://s2.bitcoinwisdom.com/ticker';
+    const ENDPOINT_BITFINEX = 'https://api.bitfinex.com/v1/pubticker/btcusd';
+    const ENDPOINT_BITSTAMP = 'https://www.bitstamp.net/api/v2/ticker/btcusd/';
 
     /**
      * @var GuzzleClient
@@ -27,7 +28,7 @@ class Price
     /**
      * @param GuzzleClient $guzzleClient
      * @param PredisClient $predisClient
-     * @param Exchange     $exchange
+     * @param Exchange $exchange
      */
     public function __construct(GuzzleClient $guzzleClient, PredisClient $predisClient, Exchange $exchange)
     {
@@ -49,14 +50,23 @@ class Price
         $ttl   = $this->predisClient->ttl($redisKey);
 
         if (!$price || $ttl < 0) {
-            $resource = $this->guzzleClient->request('GET', self::TICKER_ENDPOINT);
+
+            if ($this->exchange->getName() === Exchange::EXCHANGE_BITSTAMP) {
+                $endpoint = self::ENDPOINT_BITSTAMP;
+            } else {
+                $endpoint = self::ENDPOINT_BITFINEX;
+            }
+
+            $resource = $this->guzzleClient->request('GET', $endpoint);
 
             $file = $resource->getBody();
             $data = json_decode($file);
 
-            $prop = $this->exchange->getName() . 'btcusd';
-
-            $price = $data->{$prop}->last;
+            if ($this->exchange->getName() === Exchange::EXCHANGE_BITSTAMP) {
+                $price = $data->last;
+            } else {
+                $price = $data->last_price;
+            }
 
             $this->predisClient->set($redisKey, (int)$price);
             $this->predisClient->expireat($redisKey, strtotime("+30 seconds"));

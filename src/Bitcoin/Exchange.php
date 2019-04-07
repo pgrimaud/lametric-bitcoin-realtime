@@ -9,6 +9,9 @@ class Exchange
         'bitfinex'
     ];
 
+    const EXCHANGE_BITSTAMP = 'bitstamp';
+    const EXCHANGE_BITFINEX = 'bitfinex';
+
     /**
      * @var string
      */
