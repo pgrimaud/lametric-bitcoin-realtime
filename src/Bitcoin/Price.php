@@ -69,7 +69,7 @@ class Price
             }
 
             $this->predisClient->set($redisKey, $price);
-            $this->predisClient->expireat($redisKey, strtotime("+30 seconds"));
+            $this->predisClient->expireat($redisKey, strtotime("+10 seconds"));
         }
 
         return $price;
