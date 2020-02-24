@@ -9,7 +9,7 @@ class Price
 {
     const ENDPOINT_BITFINEX = 'https://api.bitfinex.com/v1/pubticker/btcusd';
     const ENDPOINT_BITSTAMP = 'https://www.bitstamp.net/api/v2/ticker/btcusd/';
-    const ENDPOINT_COINBASE = 'https://api.coinbase.com/v2/exchange-rates';
+    const ENDPOINT_COINBASE = 'https://api.coinbase.com/v2/exchange-rates?currency=BTC';
 
     /**
      * @var GuzzleClient
@@ -78,7 +78,7 @@ class Price
                     $price = (int)$data->last_price;
                     break;
                 case Exchange::EXCHANGE_COINBASE:
-                    $price = (int)$data->rates->USD;
+                    $price = (int)$data->data->rates->USD;
                     break;
                 default:
                     $price = 0;
