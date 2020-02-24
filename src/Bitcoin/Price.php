@@ -78,7 +78,7 @@ class Price
                     $price = (int)$data->last_price;
                     break;
                 case Exchange::EXCHANGE_COINBASE:
-                    $price = (int)$data->rates['USD'];
+                    $price = (int)$data->rates->USD;
                     break;
                 default:
                     $price = 0;

@@ -12,7 +12,7 @@ class Exchange
 
     const EXCHANGE_BITSTAMP = 'bitstamp';
     const EXCHANGE_BITFINEX = 'bitfinex';
-    const EXCHANGE_COINBASE = 'coincase';
+    const EXCHANGE_COINBASE = 'coinbase';
 
     /**
      * @var string
