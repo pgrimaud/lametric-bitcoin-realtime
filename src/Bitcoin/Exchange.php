@@ -6,11 +6,13 @@ class Exchange
 {
     const ALLOWED_EXCHANGES = [
         'bitstamp',
-        'bitfinex'
+        'bitfinex',
+        'coinbase'
     ];
 
     const EXCHANGE_BITSTAMP = 'bitstamp';
     const EXCHANGE_BITFINEX = 'bitfinex';
+    const EXCHANGE_COINBASE = 'coincase';
 
     /**
      * @var string

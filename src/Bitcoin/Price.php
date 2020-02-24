@@ -9,6 +9,7 @@ class Price
 {
     const ENDPOINT_BITFINEX = 'https://api.bitfinex.com/v1/pubticker/btcusd';
     const ENDPOINT_BITSTAMP = 'https://www.bitstamp.net/api/v2/ticker/btcusd/';
+    const ENDPOINT_COINBASE = 'https://api.coinbase.com/v2/exchange-rates';
 
     /**
      * @var GuzzleClient
@@ -28,7 +29,7 @@ class Price
     /**
      * @param GuzzleClient $guzzleClient
      * @param PredisClient $predisClient
-     * @param Exchange $exchange
+     * @param Exchange     $exchange
      */
     public function __construct(GuzzleClient $guzzleClient, PredisClient $predisClient, Exchange $exchange)
     {
@@ -51,10 +52,17 @@ class Price
 
         if (!$price || $ttl < 0) {
 
-            if ($this->exchange->getName() === Exchange::EXCHANGE_BITSTAMP) {
-                $endpoint = self::ENDPOINT_BITSTAMP;
-            } else {
-                $endpoint = self::ENDPOINT_BITFINEX;
+            switch ($this->exchange->getName()) {
+                case Exchange::EXCHANGE_BITSTAMP:
+                    $endpoint = self::ENDPOINT_BITSTAMP;
+                    break;
+                case Exchange::EXCHANGE_BITFINEX:
+                    $endpoint = self::ENDPOINT_BITFINEX;
+                    break;
+                case Exchange::EXCHANGE_COINBASE:
+                default:
+                    $endpoint = self::ENDPOINT_COINBASE;
+                    break;
             }
 
             $resource = $this->guzzleClient->request('GET', $endpoint);
@@ -62,14 +70,23 @@ class Price
             $file = $resource->getBody();
             $data = json_decode($file);
 
-            if ($this->exchange->getName() === Exchange::EXCHANGE_BITSTAMP) {
-                $price = (int)$data->last;
-            } else {
-                $price = (int)$data->last_price;
+            switch ($this->exchange->getName()) {
+                case Exchange::EXCHANGE_BITSTAMP:
+                    $price = (int)$data->last;
+                    break;
+                case Exchange::EXCHANGE_BITFINEX:
+                    $price = (int)$data->last_price;
+                    break;
+                case Exchange::EXCHANGE_COINBASE:
+                    $price = (int)$data->rates['USD'];
+                    break;
+                default:
+                    $price = 0;
+                    break;
             }
 
             $this->predisClient->set($redisKey, $price);
-            $this->predisClient->expireat($redisKey, strtotime("+10 seconds"));
+            $this->predisClient->expireat($redisKey, strtotime("+30 seconds"));
         }
 
         return $price;
