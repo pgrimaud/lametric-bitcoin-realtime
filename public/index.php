@@ -1,6 +1,9 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+$config = require_once __DIR__ . '/../config/parameters.php';
+
+Sentry\init(['dsn' => $config['sentry_key']]);
 
 use Bitcoin\Exchange;
 use Bitcoin\Price;
@@ -19,7 +22,7 @@ try {
 
     echo $response->data($price->getValue());
 
-} Catch (Exception $exception) {
+} catch (Exception $exception) {
 
     echo $response->error();
 
