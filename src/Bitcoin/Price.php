@@ -9,8 +9,8 @@ use Predis\Client as PredisClient;
 
 class Price
 {
-    const ENDPOINT_BITFINEX = 'https://api.bitfinex.com/v1/pubticker/btcusd';
-    const ENDPOINT_BITSTAMP = 'https://www.bitstamp.net/api/v2/ticker/btcusd/';
+    const ENDPOINT_BITFINEX = 'https://api.bitfinex.com/v1/pubticker/btc{{currency}}';
+    const ENDPOINT_BITSTAMP = 'https://www.bitstamp.net/api/v2/ticker/btc{{currency}}/';
     const ENDPOINT_COINBASE = 'https://api.coinbase.com/v2/exchange-rates?currency=BTC';
 
     /**
@@ -47,7 +47,7 @@ class Price
      */
     public function getValue(): int
     {
-        $redisKey = 'lametric:bitcoin:' . $this->exchange->getName();
+        $redisKey = 'lametric:bitcoin:' . $this->exchange->getName() . ':' . $this->exchange->getCurrency();
 
         $price = $this->predisClient->get($redisKey);
         $ttl   = $this->predisClient->ttl($redisKey);
@@ -56,10 +56,11 @@ class Price
 
             switch ($this->exchange->getName()) {
                 case Exchange::EXCHANGE_BITSTAMP:
-                    $endpoint = self::ENDPOINT_BITSTAMP;
+                    $endpoint = str_replace('{{currency}}', $this->exchange->getCurrency(), self::ENDPOINT_BITSTAMP);
                     break;
                 case Exchange::EXCHANGE_BITFINEX:
-                    $endpoint = self::ENDPOINT_BITFINEX;
+                    $currency = $this->exchange->getCurrency() === 'CHF' ? 'XCH' : $this->exchange->getCurrency();
+                    $endpoint = str_replace('{{currency}}', $currency, self::ENDPOINT_BITFINEX);
                     break;
                 case Exchange::EXCHANGE_COINBASE:
                 default:
@@ -80,7 +81,7 @@ class Price
                     $price = (int)$data->last_price;
                     break;
                 case Exchange::EXCHANGE_COINBASE:
-                    $price = (int)$data->data->rates->USD;
+                    $price = (int)$data->data->rates->{$this->exchange->getCurrency()};
                     break;
                 default:
                     $price = 0;
@@ -92,5 +93,33 @@ class Price
         }
 
         return (int)$price;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSymbol(): string
+    {
+        $symbol = '';
+
+        switch ($this->exchange->getCurrency()) {
+            case 'USD':
+                $symbol = '$';
+                break;
+            case 'EUR':
+                $symbol = '€';
+                break;
+            case 'GBP':
+                $symbol = '£';
+                break;
+            case 'JPY':
+                $symbol = '¥';
+                break;
+            case 'CHF':
+                $symbol = 'CHF';
+                break;
+        }
+
+        return $symbol;
     }
 }

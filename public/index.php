@@ -22,7 +22,7 @@ try {
     $exchange = new Exchange($_GET);
     $price    = new Price(new GuzzleClient(), new PredisClient(), $exchange);
 
-    echo $response->data($price->getValue());
+    echo $response->data($price->getValue(), $price->getSymbol());
 
 } catch (Exception $exception) {
 

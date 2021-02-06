@@ -34,16 +34,17 @@ class Response
 
     /**
      * @param int $price
+     * @param string $symbol
      *
      * @return string
      */
-    public function data(int $price = 0): string
+    public function data(int $price = 0, string $symbol = ''): string
     {
         return $this->asJson([
             'frames' => [
                 [
                     'index' => 0,
-                    'text'  => ($price) . '$',
+                    'text'  => ($price) . $symbol,
                     'icon'  => 'i857',
                 ],
             ],
