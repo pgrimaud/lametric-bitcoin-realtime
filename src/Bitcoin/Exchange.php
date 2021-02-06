@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Bitcoin;
 
 class Exchange
@@ -7,7 +9,7 @@ class Exchange
     const ALLOWED_EXCHANGES = [
         'bitstamp',
         'bitfinex',
-        'coinbase'
+        'coinbase',
     ];
 
     const EXCHANGE_BITSTAMP = 'bitstamp';
@@ -17,14 +19,14 @@ class Exchange
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @param array $parameters
      *
      * @throws \Exception
      */
-    public function __construct($parameters = [])
+    public function __construct(array $parameters = [])
     {
         $exchange   = strtolower(isset($parameters['exchange']) ? $parameters['exchange'] : '');
         $this->name = in_array($exchange, self::ALLOWED_EXCHANGES) ? $exchange : self::ALLOWED_EXCHANGES[0];
@@ -33,7 +35,7 @@ class Exchange
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Bitcoin;
 
 use GuzzleHttp\Client as GuzzleClient;
@@ -14,22 +16,22 @@ class Price
     /**
      * @var GuzzleClient
      */
-    private $guzzleClient;
+    private GuzzleClient $guzzleClient;
 
     /**
      * @var PredisClient
      */
-    private $predisClient;
+    private PredisClient $predisClient;
 
     /**
      * @var Exchange
      */
-    private $exchange;
+    private Exchange $exchange;
 
     /**
      * @param GuzzleClient $guzzleClient
      * @param PredisClient $predisClient
-     * @param Exchange     $exchange
+     * @param Exchange $exchange
      */
     public function __construct(GuzzleClient $guzzleClient, PredisClient $predisClient, Exchange $exchange)
     {
@@ -39,11 +41,11 @@ class Price
     }
 
     /**
-     * @return string
+     * @return int
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getValue()
+    public function getValue(): int
     {
         $redisKey = 'lametric:bitcoin:' . $this->exchange->getName();
 

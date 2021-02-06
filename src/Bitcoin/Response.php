@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bitcoin;
 
 class Response
@@ -7,44 +9,44 @@ class Response
     /**
      * @param array $data
      *
-     * @return mixed
+     * @return string
      */
-    public function asJson($data = [])
+    public function asJson(array $data = []): string
     {
         return json_encode($data);
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function error()
+    public function error(): string
     {
         return $this->asJson([
             'frames' => [
                 [
                     'index' => 0,
                     'text'  => 'ERROR',
-                    'icon'  => 'i857'
-                ]
-            ]
+                    'icon'  => 'i857',
+                ],
+            ],
         ]);
     }
 
     /**
-     * @param $price
+     * @param int $price
      *
-     * @return mixed
+     * @return string
      */
-    public function data($price = 0)
+    public function data(int $price = 0): string
     {
         return $this->asJson([
             'frames' => [
                 [
                     'index' => 0,
                     'text'  => ($price) . '$',
-                    'icon'  => 'i857'
-                ]
-            ]
+                    'icon'  => 'i857',
+                ],
+            ],
         ]);
     }
 }
