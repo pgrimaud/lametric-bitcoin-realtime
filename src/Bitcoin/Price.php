@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Bitcoin;
 
@@ -70,7 +70,7 @@ class Price
             $resource = $this->guzzleClient->request('GET', $endpoint);
 
             $file = $resource->getBody();
-            $data = json_decode($file);
+            $data = json_decode((string)$file);
 
             switch ($this->exchange->getName()) {
                 case Exchange::EXCHANGE_BITSTAMP:
@@ -91,6 +91,6 @@ class Price
             $this->predisClient->expireat($redisKey, strtotime("+30 seconds"));
         }
 
-        return $price;
+        return (int)$price;
     }
 }
