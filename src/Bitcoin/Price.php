@@ -47,7 +47,7 @@ class Price
      */
     public function getValue(): int
     {
-        $redisKey = 'lametric:bitcoin:' . $this->exchange->getName() . ':' . $this->exchange->getCurrency();
+        $redisKey = 'lametric:bitcoin:' . $this->exchange->getName() . ':' . strtolower($this->exchange->getCurrency());
 
         $price = $this->predisClient->get($redisKey);
         $ttl   = $this->predisClient->ttl($redisKey);
