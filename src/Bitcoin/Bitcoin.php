@@ -133,6 +133,6 @@ class Bitcoin
         $price    = $this->getPrice($this->exchange->getName(), 'USD');
         $satPrice = 10e7 / $price;
 
-        return round($satPrice, 4);
+        return round($satPrice, 2);
     }
 }
