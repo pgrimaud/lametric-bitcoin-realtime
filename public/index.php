@@ -19,14 +19,12 @@ try {
     $exchange = new Exchange($_GET);
     $bitcoin  = new Bitcoin(new GuzzleClient(), new PredisClient(), $exchange);
 
-    $price    = $bitcoin->getPrice();
+    $price    = $exchange->showPrice() ? $bitcoin->getPrice() : null;
     $height   = $exchange->showHeight() ? $bitcoin->getHeight() : null;
     $satPrice = $exchange->showSatoshi() ? $bitcoin->getSatPrice() : null;
 
-    echo $response->data($bitcoin->getPrice(), $bitcoin->getSymbol(), $height, $satPrice);
+    echo $response->data($price, $bitcoin->getSymbol(), $height, $satPrice);
 
 } catch (Exception $exception) {
-    var_dump($exception->getMessage());
-    exit;
     echo $response->error();
 }

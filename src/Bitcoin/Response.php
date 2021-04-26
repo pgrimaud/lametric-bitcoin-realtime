@@ -33,24 +33,27 @@ class Response
     }
 
     /**
-     * @param int        $price
+     * @param int|null   $price
      * @param string     $symbol
      * @param int|null   $height
      * @param float|null $satPrice
-     *
      * @return string
      */
-    public function data(int $price = 0, string $symbol = '$', int $height = null, float $satPrice = null): string
+    public function data(?int $price = 0, string $symbol = '$', int $height = null, float $satPrice = null): string
     {
-        $frames = [
-            [
-                'index' => 0,
-                'text'  => ($price) . $symbol,
-                'icon'  => 'i857',
-            ],
-        ];
+        $position = 0;
+        $frames   = [];
 
-        $position = 1;
+        if ($price) {
+            $frames = array_merge($frames, [
+                [
+                    'index' => $position,
+                    'text'  => ($price) . $symbol,
+                    'icon'  => 'i857',
+                ],
+            ]);
+            $position++;
+        }
 
         if ($satPrice) {
             $frames = array_merge($frames, [
