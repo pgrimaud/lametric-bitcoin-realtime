@@ -7,59 +7,46 @@ namespace Bitcoin;
 use GuzzleHttp\Client as GuzzleClient;
 use Predis\Client as PredisClient;
 
-class Price
+class Bitcoin
 {
     const ENDPOINT_BITFINEX = 'https://api.bitfinex.com/v1/pubticker/btc{{currency}}';
     const ENDPOINT_BITSTAMP = 'https://www.bitstamp.net/api/v2/ticker/btc{{currency}}/';
     const ENDPOINT_COINBASE = 'https://api.coinbase.com/v2/exchange-rates?currency=BTC';
 
-    /**
-     * @var GuzzleClient
-     */
-    private GuzzleClient $guzzleClient;
-
-    /**
-     * @var PredisClient
-     */
-    private PredisClient $predisClient;
-
-    /**
-     * @var Exchange
-     */
-    private Exchange $exchange;
+    const ENDPOINT_HEIGHT = 'https://blockchain.info/q/getblockcount';
 
     /**
      * @param GuzzleClient $guzzleClient
      * @param PredisClient $predisClient
-     * @param Exchange $exchange
+     * @param Exchange     $exchange
      */
-    public function __construct(GuzzleClient $guzzleClient, PredisClient $predisClient, Exchange $exchange)
+    public function __construct(private GuzzleClient $guzzleClient, private PredisClient $predisClient, private Exchange $exchange)
     {
-        $this->guzzleClient = $guzzleClient;
-        $this->predisClient = $predisClient;
-        $this->exchange     = $exchange;
     }
 
     /**
+     * @param string|null $exchange
      * @return int
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getValue(): int
+    public function getPrice(string $exchange = null, string $currency = null): int
     {
-        $redisKey = 'lametric:bitcoin:' . $this->exchange->getName() . ':' . strtolower($this->exchange->getCurrency());
+        $exchange ??= $this->exchange->getName();
+        $currency ??= $this->exchange->getCurrency();
+
+        $redisKey = 'lametric:bitcoin:' . $this->exchange->getName() . ':' . strtolower($currency);
 
         $price = $this->predisClient->get($redisKey);
         $ttl   = $this->predisClient->ttl($redisKey);
 
         if (!$price || $ttl < 0) {
-
-            switch ($this->exchange->getName()) {
+            switch ($exchange) {
                 case Exchange::EXCHANGE_BITSTAMP:
-                    $endpoint = str_replace('{{currency}}', $this->exchange->getCurrency(), self::ENDPOINT_BITSTAMP);
+                    $endpoint = str_replace('{{currency}}', $currency, self::ENDPOINT_BITSTAMP);
                     break;
                 case Exchange::EXCHANGE_BITFINEX:
-                    $currency = $this->exchange->getCurrency() === 'CHF' ? 'XCH' : $this->exchange->getCurrency();
+                    $currency = $currency === 'CHF' ? 'XCH' : $currency;
                     $endpoint = str_replace('{{currency}}', $currency, self::ENDPOINT_BITFINEX);
                     break;
                 case Exchange::EXCHANGE_COINBASE:
@@ -71,17 +58,17 @@ class Price
             $resource = $this->guzzleClient->request('GET', $endpoint);
 
             $file = $resource->getBody();
-            $data = json_decode((string)$file);
+            $data = json_decode((string) $file);
 
-            switch ($this->exchange->getName()) {
+            switch ($exchange) {
                 case Exchange::EXCHANGE_BITSTAMP:
-                    $price = (int)$data->last;
+                    $price = (int) $data->last;
                     break;
                 case Exchange::EXCHANGE_BITFINEX:
-                    $price = (int)$data->last_price;
+                    $price = (int) $data->last_price;
                     break;
                 case Exchange::EXCHANGE_COINBASE:
-                    $price = (int)$data->data->rates->{$this->exchange->getCurrency()};
+                    $price = (int) $data->data->rates->{$currency};
                     break;
                 default:
                     $price = 0;
@@ -92,7 +79,7 @@ class Price
             $this->predisClient->expireat($redisKey, strtotime("+30 seconds"));
         }
 
-        return (int)$price;
+        return (int) $price;
     }
 
     /**
@@ -121,5 +108,31 @@ class Price
         }
 
         return $symbol;
+    }
+
+    public function getHeight(): int
+    {
+        $redisKey = 'lametric:bitcoin:height';
+
+        $height = $this->predisClient->get($redisKey);
+        $ttl    = $this->predisClient->ttl($redisKey);
+
+        if (!$height || $ttl < 0) {
+            $resource = $this->guzzleClient->request('GET', self::ENDPOINT_HEIGHT);
+            $height   = (string) $resource->getBody();
+
+            $this->predisClient->set($redisKey, $height);
+            $this->predisClient->expireat($redisKey, strtotime("+300 seconds"));
+        }
+
+        return (int) $height;
+    }
+
+    public function getSatPrice(): float
+    {
+        $price    = $this->getPrice($this->exchange->getName(), 'USD');
+        $satPrice = 10e4 / $price;
+
+        return round($satPrice, 4);
     }
 }

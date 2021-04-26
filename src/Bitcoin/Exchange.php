@@ -24,15 +24,10 @@ class Exchange
     const EXCHANGE_BITFINEX = 'bitfinex';
     const EXCHANGE_COINBASE = 'coinbase';
 
-    /**
-     * @var string
-     */
     private string $name;
-
-    /**
-     * @var string
-     */
     private string $currency;
+    private bool $showSatoshi;
+    private bool $showHeight;
 
     /**
      * @param array $parameters
@@ -46,6 +41,9 @@ class Exchange
 
         $currency       = isset($parameters['currency']) ? $parameters['currency'] : '';
         $this->currency = in_array($currency, self::ALLOWED_CURRENCIES) ? $currency : self::ALLOWED_CURRENCIES[0];
+
+        $this->showSatoshi = isset($parameters['satoshi']) && $parameters['satoshi'] === 'true';
+        $this->showHeight  = isset($parameters['height']) && $parameters['height'] === 'true';
     }
 
     /**
@@ -62,5 +60,21 @@ class Exchange
     public function getCurrency(): string
     {
         return $this->currency;
+    }
+
+    /**
+     * @return bool
+     */
+    public function showSatoshi(): bool
+    {
+        return $this->showSatoshi;
+    }
+
+    /**
+     * @return bool
+     */
+    public function showHeight(): bool
+    {
+        return $this->showHeight;
     }
 }
