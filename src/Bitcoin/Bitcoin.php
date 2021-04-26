@@ -131,7 +131,7 @@ class Bitcoin
     public function getSatPrice(): float
     {
         $price    = $this->getPrice($this->exchange->getName(), 'USD');
-        $satPrice = 10e4 / $price;
+        $satPrice = 10e7 / $price;
 
         return round($satPrice, 4);
     }
