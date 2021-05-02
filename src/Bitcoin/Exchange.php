@@ -29,6 +29,7 @@ class Exchange
     private bool $showSatoshi;
     private bool $showHeight;
     private bool $showPrice;
+    private bool $showNodes;
 
     /**
      * @param array $parameters
@@ -46,6 +47,7 @@ class Exchange
         $this->showPrice   = !isset($parameters['bitcoin']) || (isset($parameters['bitcoin']) && $parameters['bitcoin'] === 'true');
         $this->showSatoshi = isset($parameters['satoshi']) && $parameters['satoshi'] === 'true';
         $this->showHeight  = isset($parameters['height']) && $parameters['height'] === 'true';
+        $this->showNodes  = isset($parameters['nodes']) && $parameters['nodes'] === 'true';
     }
 
     /**
@@ -86,5 +88,13 @@ class Exchange
     public function showPrice(): bool
     {
         return $this->showPrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function showNodes(): bool
+    {
+        return $this->showNodes;
     }
 }

@@ -22,8 +22,9 @@ try {
     $price    = $exchange->showPrice() ? $bitcoin->getPrice() : null;
     $height   = $exchange->showHeight() ? $bitcoin->getHeight() : null;
     $satPrice = $exchange->showSatoshi() ? $bitcoin->getSatPrice() : null;
+    $nodes    = $exchange->showNodes() ? $bitcoin->getNodes() : null;
 
-    echo $response->data($price, $bitcoin->getSymbol(), $height, $satPrice);
+    echo $response->data($price, $bitcoin->getSymbol(), $height, $satPrice, $nodes);
 
 } catch (Exception $exception) {
     echo $response->error();

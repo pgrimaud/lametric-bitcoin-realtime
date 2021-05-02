@@ -14,6 +14,7 @@ class Bitcoin
     const ENDPOINT_COINBASE = 'https://api.coinbase.com/v2/exchange-rates?currency=BTC';
 
     const ENDPOINT_HEIGHT = 'https://blockchain.info/q/getblockcount';
+    const ENDPOINT_NODES = 'https://bitnodes.io/api/v1/snapshots/';
 
     /**
      * @param GuzzleClient $guzzleClient
@@ -134,5 +135,26 @@ class Bitcoin
         $satPrice = 10e7 / $price;
 
         return round($satPrice, 2);
+    }
+
+    public function getNodes(): int
+    {
+        $redisKey = 'lametric:bitcoin:nodes';
+
+        $nodes = $this->predisClient->get($redisKey);
+        $ttl   = $this->predisClient->ttl($redisKey);
+
+        if (!$nodes || $ttl < 0) {
+            $resource = $this->guzzleClient->request('GET', self::ENDPOINT_NODES);
+            $jsonData = (string) $resource->getBody();
+
+            $data = json_decode($jsonData, true);
+
+            $nodes = (int) $data['results'][0]['total_nodes'];
+            $this->predisClient->set($redisKey, $nodes);
+            $this->predisClient->expireat($redisKey, strtotime("+300 seconds"));
+        }
+
+        return (int) $nodes;
     }
 }

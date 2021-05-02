@@ -37,9 +37,17 @@ class Response
      * @param string     $symbol
      * @param int|null   $height
      * @param float|null $satPrice
+     * @param int|null   $nodes
+     *
      * @return string
      */
-    public function data(?int $price = 0, string $symbol = '$', int $height = null, float $satPrice = null): string
+    public function data(
+        ?int $price = 0,
+        string $symbol = '$',
+        int $height = null,
+        float $satPrice = null,
+        int $nodes = null
+    ): string
     {
         $position = 0;
         $frames   = [];
@@ -72,6 +80,17 @@ class Response
                     'index' => $position,
                     'text'  => $height,
                     'icon'  => 'i45101',
+                ],
+            ]);
+            $position++;
+        }
+
+        if ($nodes) {
+            $frames = array_merge($frames, [
+                [
+                    'index' => $position,
+                    'text'  => $nodes,
+                    'icon'  => 'i45219',
                 ],
             ]);
         }
