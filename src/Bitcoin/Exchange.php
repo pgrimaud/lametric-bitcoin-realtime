@@ -18,6 +18,7 @@ class Exchange
         'GBP',
         'JPY',
         'CHF',
+        'ZAR (Coinbase only)',
     ];
 
     const EXCHANGE_BITSTAMP = 'bitstamp';
@@ -42,12 +43,17 @@ class Exchange
         $this->name = in_array($exchange, self::ALLOWED_EXCHANGES) ? $exchange : self::ALLOWED_EXCHANGES[0];
 
         $currency       = isset($parameters['currency']) ? $parameters['currency'] : '';
-        $this->currency = in_array($currency, self::ALLOWED_CURRENCIES) ? $currency : self::ALLOWED_CURRENCIES[0];
+        $this->currency = $this->sanitizeCurrency(in_array($currency, self::ALLOWED_CURRENCIES) ? $currency : self::ALLOWED_CURRENCIES[0]);
 
         $this->showPrice   = !isset($parameters['bitcoin']) || (isset($parameters['bitcoin']) && $parameters['bitcoin'] === 'true');
         $this->showSatoshi = isset($parameters['satoshi']) && $parameters['satoshi'] === 'true';
         $this->showHeight  = isset($parameters['height']) && $parameters['height'] === 'true';
-        $this->showNodes  = isset($parameters['nodes']) && $parameters['nodes'] === 'true';
+        $this->showNodes   = isset($parameters['nodes']) && $parameters['nodes'] === 'true';
+    }
+
+    private function sanitizeCurrency(string $currency): string
+    {
+        return strlen($currency) > 3 ? substr($currency, 0, 3) : $currency;
     }
 
     /**

@@ -21,7 +21,11 @@ class Bitcoin
      * @param PredisClient $predisClient
      * @param Exchange     $exchange
      */
-    public function __construct(private GuzzleClient $guzzleClient, private PredisClient $predisClient, private Exchange $exchange)
+    public function __construct(
+        private GuzzleClient $guzzleClient,
+        private PredisClient $predisClient,
+        private Exchange $exchange
+    )
     {
     }
 
@@ -105,6 +109,9 @@ class Bitcoin
                 break;
             case 'CHF':
                 $symbol = 'CHF';
+                break;
+            case 'ZAR':
+                $symbol = 'R';
                 break;
         }
 
