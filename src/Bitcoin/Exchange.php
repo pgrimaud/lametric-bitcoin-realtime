@@ -45,7 +45,7 @@ class Exchange
         $currency       = isset($parameters['currency']) ? $parameters['currency'] : '';
         $this->currency = $this->sanitizeCurrency(in_array($currency, self::ALLOWED_CURRENCIES) ? $currency : self::ALLOWED_CURRENCIES[0]);
 
-        $this->showPrice   = !isset($parameters['bitcoin']) || (isset($parameters['bitcoin']) && $parameters['bitcoin'] === 'true');
+        $this->showPrice   = !isset($parameters['bitcoin']) || (isset($parameters['bitcoin']) && ($parameters['bitcoin'] === 'true' || $parameters['bitcoin'] === ''));
         $this->showSatoshi = isset($parameters['satoshi']) && $parameters['satoshi'] === 'true';
         $this->showHeight  = isset($parameters['height']) && $parameters['height'] === 'true';
         $this->showNodes   = isset($parameters['nodes']) && $parameters['nodes'] === 'true';
