@@ -6,6 +6,9 @@ namespace Bitcoin;
 
 class Response
 {
+    public const POSITION_BEFORE = 'before';
+    public const POSITION_AFTER = 'after';
+
     /**
      * @param array $data
      *
@@ -25,39 +28,47 @@ class Response
             'frames' => [
                 [
                     'index' => 0,
-                    'text'  => 'ERROR',
-                    'icon'  => 'i857',
+                    'text' => 'ERROR',
+                    'icon' => 'i857',
                 ],
             ],
         ]);
     }
 
     /**
-     * @param int|null   $price
-     * @param string     $symbol
-     * @param int|null   $height
+     * @param int|null $price
+     * @param string $symbol
+     * @param int|null $height
      * @param float|null $satPrice
-     * @param int|null   $nodes
+     * @param int|null $nodes
      *
      * @return string
      */
     public function data(
-        ?int $price = 0,
+        string $symbolPosition,
+        ?int   $price = 0,
         string $symbol = '$',
-        int $height = null,
-        float $satPrice = null,
-        int $nodes = null
+        int    $height = null,
+        float  $satPrice = null,
+        int    $nodes = null
     ): string
     {
         $position = 0;
-        $frames   = [];
+        $frames = [];
+
+        // set $ position
+        if ($symbolPosition === self::POSITION_BEFORE) {
+            $price = '$' . $price;
+        } else if ($symbolPosition === self::POSITION_AFTER) {
+            $price = $price . '$';
+        }
 
         if ($price) {
             $frames = array_merge($frames, [
                 [
                     'index' => $position,
-                    'text'  => ($price) . $symbol,
-                    'icon'  => 'i857',
+                    'text' => $price,
+                    'icon' => 'i857',
                 ],
             ]);
             $position++;
@@ -67,8 +78,8 @@ class Response
             $frames = array_merge($frames, [
                 [
                     'index' => $position,
-                    'text'  => $satPrice,
-                    'icon'  => 'i45102',
+                    'text' => $satPrice,
+                    'icon' => 'i45102',
                 ],
             ]);
             $position++;
@@ -78,8 +89,8 @@ class Response
             $frames = array_merge($frames, [
                 [
                     'index' => $position,
-                    'text'  => $height,
-                    'icon'  => 'i45101',
+                    'text' => $height,
+                    'icon' => 'i45101',
                 ],
             ]);
             $position++;
@@ -89,8 +100,8 @@ class Response
             $frames = array_merge($frames, [
                 [
                     'index' => $position,
-                    'text'  => $nodes,
-                    'icon'  => 'i45219',
+                    'text' => $nodes,
+                    'icon' => 'i45219',
                 ],
             ]);
         }
