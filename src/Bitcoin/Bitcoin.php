@@ -48,7 +48,7 @@ class Bitcoin
         if (!$price || $ttl < 0) {
             switch ($exchange) {
                 case Exchange::EXCHANGE_BITSTAMP:
-                    $endpoint = str_replace('{{currency}}', $currency, self::ENDPOINT_BITSTAMP);
+                    $endpoint = str_replace('{{currency}}', strtolower($currency), self::ENDPOINT_BITSTAMP);
                     break;
                 case Exchange::EXCHANGE_BITFINEX:
                     $currency = $currency === 'CHF' ? 'XCH' : $currency;
