@@ -7,11 +7,16 @@ This application updates every 5 seconds the Bitcoin price from Bitstamp, Bitfin
 
 ## Bitcoin exchanges available
 
-![Bitfinex](https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/bitfinex.jpg)
+<img  style="width: 300px" src="https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/bitfinex.jpg">
 
-![Bitstamp](https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/bitstamp.jpg)
+<img  style="width: 300px" src="https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/bitstamp.jpg">
 
-![Coinbase](https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/coinbase.jpg)
+<img  style="width: 300px" src="https://raw.githubusercontent.com/pgrimaud/lametric-bitcoin-realtime/master/images/coinbase.jpg">
+
+<img  style="width: 300px" src="https://github.com/pgrimaud/lametric-cryptocurrencies/assets/55425039/cf2da6bc-e7eb-4892-88bc-92c2848ed501">
+
+<img  style="width: 300px" src="https://github.com/pgrimaud/lametric-cryptocurrencies/assets/55425039/67802862-9b89-47ff-a794-15e434b08eac">
+
 
 # Donations 🙏
 
