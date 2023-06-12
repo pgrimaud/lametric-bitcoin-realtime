@@ -26,9 +26,8 @@ class Bitcoin
     public function __construct(
         private GuzzleClient $guzzleClient,
         private PredisClient $predisClient,
-        private Exchange     $exchange
-    )
-    {
+        private Exchange $exchange
+    ) {
     }
 
     /**
@@ -79,7 +78,7 @@ class Bitcoin
             $price = intval($price * $currencies[$currency]);
 
             $this->predisClient->set($redisKey, $price);
-            $this->predisClient->expireat($redisKey, strtotime("+30 seconds"));
+            $this->predisClient->expireat($redisKey, strtotime('+5 seconds'));
         }
 
         return (int)$price;
