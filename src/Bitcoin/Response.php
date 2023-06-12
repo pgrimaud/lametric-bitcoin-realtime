@@ -22,13 +22,13 @@ class Response
     /**
      * @return string
      */
-    public function error(): string
+    public function error(string $error): string
     {
         return $this->asJson([
             'frames' => [
                 [
                     'index' => 0,
-                    'text' => 'ERROR',
+                    'text' => $error,
                     'icon' => 'i857',
                 ],
             ],
@@ -58,9 +58,9 @@ class Response
 
         // set $ position
         if ($symbolPosition === self::POSITION_BEFORE) {
-            $price = '$' . $price;
+            $price = $symbol . $price;
         } else if ($symbolPosition === self::POSITION_AFTER) {
-            $price = $price . '$';
+            $price = $price . $symbol;
         }
 
         if ($price) {

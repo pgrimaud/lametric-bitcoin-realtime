@@ -10,20 +10,16 @@ class Exchange
         'bitstamp',
         'bitfinex',
         'coinbase',
+        'kraken',
+        'binance'
     ];
 
-    const ALLOWED_CURRENCIES = [
-        'USD',
-        'EUR',
-        'GBP',
-        'JPY',
-        'CHF',
-        'ZAR (Coinbase only)',
-    ];
 
     const EXCHANGE_BITSTAMP = 'bitstamp';
     const EXCHANGE_BITFINEX = 'bitfinex';
     const EXCHANGE_COINBASE = 'coinbase';
+    const EXCHANGE_KRAKEN = 'kraken';
+    const EXCHANGE_BINANCE = 'binance';
 
     private string $name;
     private string $currency;
@@ -35,11 +31,11 @@ class Exchange
 
     public function __construct(array $parameters = [])
     {
-        $exchange = strtolower(isset($parameters['exchange']) ? $parameters['exchange'] : '');
+        $exchange = strtolower($parameters['exchange'] ?? '');
         $this->name = in_array($exchange, self::ALLOWED_EXCHANGES) ? $exchange : self::ALLOWED_EXCHANGES[0];
 
-        $currency = isset($parameters['currency']) ? $parameters['currency'] : '';
-        $this->currency = $this->sanitizeCurrency(in_array($currency, self::ALLOWED_CURRENCIES) ? $currency : self::ALLOWED_CURRENCIES[0]);
+        $currency = $parameters['currency'] ?? '';
+        $this->currency = $this->sanitizeCurrency($currency);
 
         $this->showPrice = !isset($parameters['bitcoin']) || (isset($parameters['bitcoin']) && ($parameters['bitcoin'] === 'true' || $parameters['bitcoin'] === ''));
         $this->showSatoshi = isset($parameters['satoshi']) && $parameters['satoshi'] === 'true';

@@ -28,5 +28,5 @@ try {
     echo $response->data($position, $price, $bitcoin->getSymbol(), $height, $satPrice, $nodes);
 
 } catch (Exception $exception) {
-    echo $response->error();
+    echo $response->error($exception->getMessage());
 }
