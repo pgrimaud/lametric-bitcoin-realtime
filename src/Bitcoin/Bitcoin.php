@@ -39,7 +39,7 @@ class Bitcoin
     public function getPrice(string $exchange = null, string $currency = null): int
     {
         $exchange ??= $this->exchange->getName();
-        $currency ??= $this->exchange->getCurrency();
+        $currency = !empty($this->exchange->getCurrency()) ? $this->exchange->getCurrency() : 'USD';
 
         $redisKey = 'lametric:bitcoin:' . $this->exchange->getName() . ':' . strtolower($currency);
 
