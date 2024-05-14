@@ -56,14 +56,14 @@ class Response
         $position = 0;
         $frames = [];
 
-        // set $ position
-        if ($symbolPosition === self::POSITION_BEFORE) {
-            $price = $symbol . $price;
-        } else if ($symbolPosition === self::POSITION_AFTER) {
-            $price = $price . $symbol;
-        }
-
         if ($price) {
+            // set currency position
+            if ($symbolPosition === self::POSITION_BEFORE) {
+                $price = $symbol . $price;
+            } else if ($symbolPosition === self::POSITION_AFTER) {
+                $price = $price . $symbol;
+            }
+
             $frames = array_merge($frames, [
                 [
                     'index' => $position,
