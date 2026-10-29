@@ -1,4 +1,7 @@
-# "Realtime Bitcoin" for LaMetric
+# "Realtime Bitcoin" for LaMetri
+
+> [!CAUTION]
+> READ-ONLY : APP MIGRATED TO https://github.com/pgrimaud/lumiere
 
 Not another Bitcoin app.
 This application updates every 5 seconds the Bitcoin price from Bitstamp, Bitfinex or Coinbase, bitcoin exchanges.
